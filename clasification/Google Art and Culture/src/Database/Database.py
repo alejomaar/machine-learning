@@ -18,10 +18,10 @@ class Database():
     def create(self,values):
         self.create_many([values])
 
-    def create_many(self,values):
+    def create_many(self,values,custom_shape=None):
         entity = self.entity
         name= entity['NAME']
-        shape = entity['SHAPE']
+        shape = custom_shape or entity['SHAPE']
         
         query =f"""
         insert into {name}

@@ -1,9 +1,10 @@
 CUSTOMER ={
-    "NAME":'customers',
+    "NAME":'links',
     "SCHEMA":"""
-    first_name text,
-    last_name text,
-    email text
+    id integer,
+    link text,
+    is_download,
+    PRIMARY KEY (link)
     """,
     "SHAPE":"(?,?,?)",
 }
