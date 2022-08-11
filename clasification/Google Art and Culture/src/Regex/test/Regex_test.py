@@ -1,5 +1,5 @@
 import unittest
-from utils.Regex import Regex
+from .. import Regex
 
 regex =Regex()
 class Regex_Test(unittest.TestCase):
