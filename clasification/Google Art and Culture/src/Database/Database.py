@@ -3,7 +3,7 @@ import sqlite3
 #Create Database Manager using CRUD Structure
 class Database():
     def __init__(self,entity):
-        self.db = sqlite3.connect('data.db')
+        self.db = sqlite3.connect('data.db',check_same_thread=False)
         self.cursor = self.db.cursor()
         self.entity = entity
     
@@ -25,6 +25,7 @@ class Database():
         
         query =f"""
         insert into {name}
+        (link,is_download)
         values {shape}
         """
         print(query)
@@ -41,8 +42,9 @@ class Database():
         return self.cursor.fetchall()
     
     #UPDATE
-    def update(self):
-        pass
+    def update(self,query):
+        self.cursor.execute(query)
+        return self.db.commit()
 
     #DELETE
     def delete(self):

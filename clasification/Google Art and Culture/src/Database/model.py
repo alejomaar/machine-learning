@@ -1,10 +1,9 @@
 CUSTOMER ={
     "NAME":'links',
     "SCHEMA":"""
-    id integer,
+    id integer primary key autoincrement,
     link text,
-    is_download,
-    PRIMARY KEY (link)
+    is_download text
     """,
     "SHAPE":"(?,?,?)",
 }
