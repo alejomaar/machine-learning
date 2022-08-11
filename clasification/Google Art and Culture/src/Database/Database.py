@@ -1,36 +1,53 @@
 import sqlite3
 
+#Create Database Manager using CRUD Structure
 class Database():
-    def __init__(self,name):
-        self.db = sqlite3.connect(name)
+    def __init__(self,entity):
+        self.db = sqlite3.connect('data.db')
         self.cursor = self.db.cursor()
-        self.name = name
-
-    def create_table_customers(self,shape):
-        query= """
-        create table if not exists customers(
-        first_name datatype,
-        last_name datatype,
-        email datatype
-        )
-        """
+        self.entity = entity
+    
+    def create_table(self):
+        entity = self.entity
+        name= entity['NAME']
+        schema = entity['SCHEMA']
+        query= f"""create table if not exists {name}({schema})"""
         self.cursor.execute(query)
 
-    def insert_customers(self,first_name,last_name,email):
+    #CREATE
+    def create(self,values):
+        self.create_many([values])
+
+    def create_many(self,values):
+        entity = self.entity
+        name= entity['NAME']
+        shape = entity['SHAPE']
+        
         query =f"""
-        insert into customers
-        values ('{first_name}','{last_name}','{email}')
+        insert into {name}
+        values {shape}
         """
-        self.cursor.execute(query)
+        print(query)
+        self.cursor.executemany(query,values)
         self.db.commit()
-
-    def select_all_customers(self):
-        query = f"""
-            select *
-            from customers
-        """
+    #READ
+    def read(self,query):
         self.cursor.execute(query)
         return self.cursor.fetchall()
+    def read_all(self):
+        entity = self.entity
+        name= entity['NAME']
+        self.cursor.execute(f'select * from {name}')
+        return self.cursor.fetchall()
+    
+    #UPDATE
+    def update(self):
+        pass
+
+    #DELETE
+    def delete(self):
+        pass
+
 
 
 
