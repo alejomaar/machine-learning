@@ -38,8 +38,8 @@ class Scraper:
         time.sleep(7)
         
         #Get picture pages and image links
-        picture_pages =self.get_pictures_pages()[0:5]
-        picture_links= self.get_pictures_links()[0:5]
+        picture_pages =self.get_pictures_pages()
+        picture_links= self.get_pictures_links()
         
         #Show state
         len_pictures = len(picture_pages)    
