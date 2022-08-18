@@ -1,7 +1,7 @@
 from typing import List
 from .Storage import Storage
 from selenium import webdriver
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 import time
 
 class Scraper:
@@ -20,16 +20,16 @@ class Scraper:
         """
 
         self.driver = webdriver.Chrome(executable_path = path)
-        self.SCROLL_DOWN = 40
+        self.SCROLL_DOWN = 1
         self.storage = Storage()
         self.color = color
         
-    def scraping_data(self)->List(dict):        
+    def scraping_data(self)->List[dict]:        
         """Exec webscraping
 
         Returns
         -------
-        List(dict)
+        List[dict]
             list of dict of webscraped data with shape {url,data,category}
         """
         #Scroll page until the end.
@@ -38,8 +38,8 @@ class Scraper:
         time.sleep(7)
         
         #Get picture pages and image links
-        picture_pages =self.get_pictures_pages()
-        picture_links= self.get_pictures_links()
+        picture_pages =self.get_pictures_pages()[0:5]
+        picture_links= self.get_pictures_links()[0:5]
         
         #Show state
         len_pictures = len(picture_pages)    
@@ -55,7 +55,7 @@ class Scraper:
             details = self.get_picture_details()
             self.storage.add(picture_link,details,self.color) 
         #Return retrival data
-        return self.get_data()
+        return self.storage.get_data()
     
        
         
@@ -115,13 +115,12 @@ class Scraper:
             Each of the image page links in current session
         """  
 
-        scripts=[
-            "var containers = [...document.querySelectorAll('.DuHQbc')];",
-            'var img_elements = containers.map(contain => contain.firstElementChild);'
-            'return img_elements.map(a => a.href)'
-        ]
-            
-        script = self.mergeJS(scripts) 
+        script="""
+        var containers = [...document.querySelectorAll('.DuHQbc')];
+        var img_elements = containers.map(contain => contain.firstElementChild);
+        return img_elements.map(a => a.href)
+        """
+
         pages = self.driver.execute_script(script)
         return pages
         
@@ -134,30 +133,13 @@ class Scraper:
         List[str]
             Each of the picture link in current session
         """ 
-
-        scripts=[
-            "var containers = [...document.querySelectorAll('.DuHQbc')];",
-            'var img_elements= containers.map(contain => contain.firstElementChild);'
-            'return img_elements.map(a =>window.getComputedStyle(a, false).backgroundImage)'
-        ]
-        script = self.mergeJS(scripts) 
+        script = '''
+        var containers = [...document.querySelectorAll('.DuHQbc')];
+        var img_elements= containers.map(contain => contain.firstElementChild);
+        return img_elements.map(a =>window.getComputedStyle(a, false).backgroundImage)
+        '''
         urls_raw = self.driver.execute_script(script)
         urls = list(filter(lambda url:url!='none',urls_raw))
         links = list(map(lambda url:url.split('"')[1],urls))
         return links
 
-    
-    def mergeJS(self,scripts:List[str])->str:
-        """Combine a list of js scripts into one
-
-        Parameters
-        ----------
-        scripts : List[str]
-            List of related scripts
-
-        Returns
-        -------
-        str
-            Scripts combined 
-        """             
-        return ''.join(scripts)
