@@ -20,7 +20,7 @@ class Scraper:
         """
 
         self.driver = webdriver.Chrome(executable_path = path)
-        self.SCROLL_DOWN = 1
+        self.SCROLL_DOWN = 40
         self.storage = Storage()
         self.color = color
         
