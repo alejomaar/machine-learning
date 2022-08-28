@@ -1,0 +1,11 @@
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3
+    steps:  
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: python -m unittest discover
