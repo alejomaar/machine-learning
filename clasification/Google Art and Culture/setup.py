@@ -1,11 +1,12 @@
-from glob import glob
-from os.path import basename, splitext
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
 
 setup(
-    name='helpers',
-    version='0.1',
-    packages=find_packages(where='src'),
-    package_dir={'': 'src'},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    name='google-images',
+    version='0.1.0',
+    author='alejandro_aponte',
+    description='description',
+    python_requires='>=3',
+    license='MIT',
+    packages=find_packages(),
+    long_description='long description',
 )
