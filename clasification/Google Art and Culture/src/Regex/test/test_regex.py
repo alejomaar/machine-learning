@@ -19,7 +19,7 @@ class Regex_Test(unittest.TestCase):
         self.assertEqual(regex.get_width('h100 w200.47'),'200.47')
         self.assertEqual(regex.get_width('h100 w500,47'),'500,47')
         #return None when width does not exist
-        self.assertEqual(regex.get_width('h100'),None)
+        self.assertEqual(regex.get_width('text'),None)
     
     def test_get_height(self):     
         #Capture the height when it exist
@@ -28,7 +28,7 @@ class Regex_Test(unittest.TestCase):
         self.assertEqual(regex.get_height('w100 h200.47'),'200.47')
         self.assertEqual(regex.get_height('w100 h500,47'),'500,47')
         #return None when height does not exist
-        self.assertEqual(regex.get_height('w100'),None)
+        self.assertEqual(regex.get_height('text'),None)
     
     def test_get_measure(self):     
         #Capture the height when it exist
