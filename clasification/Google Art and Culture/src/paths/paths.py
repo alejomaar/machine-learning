@@ -5,6 +5,7 @@ def get_paths():
     DIR = [['data','final'],
            ['data','processed'],
            ['data','raw'],
+           ['data','final','img'],
            ['documentation'],
            ['models']
           ]
