@@ -3,14 +3,19 @@ from .. import Regex
 
 regex =Regex()
 class Regex_Test(unittest.TestCase):
-    def test_get_integer(self):    
+    def test_get_date(self):    
         #Capture the number when it exist 
-        self.assertEqual(regex.get_integer('4545'), '4545')
-        self.assertEqual(regex.get_integer('4545,78'), '4545')
-        self.assertEqual(regex.get_integer('454$^y5fg'), '454')
-        self.assertEqual(regex.get_integer('454 between string 789'), '454')
+        self.assertEqual(regex.get_date('2021,  2020'), 2021)
+        self.assertEqual(regex.get_date('2021-01-09'), 2021)
+        self.assertEqual(regex.get_date('late 20th century'), 1900)
+        self.assertEqual(regex.get_date('18th century'), 1700)
+        self.assertEqual(regex.get_date('Second half of the 1750s'), 1750)
+        self.assertEqual(regex.get_date('2nd half of the 19th c.'), 1800)
+        
+        
         #return None when number does not exist
-        self.assertEqual(regex.get_integer('only string'), None)      
+        self.assertEqual(regex.get_date(float("nan")),None)
+        self.assertEqual(regex.get_date('only string'), None)      
 
     def test_get_width(self):     
         #Capture the width when it exist
