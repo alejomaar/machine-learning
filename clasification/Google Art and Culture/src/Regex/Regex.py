@@ -37,6 +37,13 @@ class Regex():
             return None
         except:
             return None
+        
+    def get_country(self,string):
+        if(type(string)!=str):
+            return None
+        sep = string.split(',')
+        return sep[-1]
+        
 
     def get_width(self,string):
         if(type(string)!=str):
