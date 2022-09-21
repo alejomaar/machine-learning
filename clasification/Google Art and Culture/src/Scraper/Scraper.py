@@ -1,7 +1,6 @@
 from typing import List
 from .Storage import Storage
 from selenium import webdriver
-from tqdm.notebook import tqdm
 import time
 
 class Scraper:
@@ -20,7 +19,7 @@ class Scraper:
         """
 
         self.driver = webdriver.Chrome(executable_path = path)
-        self.SCROLL_DOWN = 40
+        self.SCROLL_DOWN = 45
         self.storage = Storage()
         self.color = color
         
@@ -41,13 +40,9 @@ class Scraper:
         picture_pages =self.get_pictures_pages()
         picture_links= self.get_pictures_links()
         
-        #Show state
-        len_pictures = len(picture_pages)    
-        bar_progress = tqdm(range(len_pictures),desc=self.color)
         #For each picture, get theirs details.
-        for (i,page,picture_link) in zip(bar_progress,picture_pages,picture_links):
+        for (page,picture_link) in zip(picture_pages,picture_links):
             if(page==None or picture_link==None):
-                print("Loop break")
                 break          
             #Open picture page ,get and store its information.
             self.driver.get(page)
@@ -80,7 +75,7 @@ class Scraper:
         """ 
         for j in range(0, scrolls):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(8)  
+            time.sleep(3)  
             
     def get_picture_details(self)-> str:
         """Get all details of picture page in json format as string.
@@ -94,6 +89,8 @@ class Scraper:
         
         script = '''
         var details = [...document.querySelector(".ve9nKb").querySelectorAll('li')];
+        var museum = document.querySelector(".To7WBf")?.childNodes?.[0]?.textContent;
+        var loc = document.querySelector(".WrfKPd")?.textContent;
         var info = details.reduce((acc,item)=>{
             const text = item.textContent;
             const chunks = text.split(':');
@@ -101,6 +98,8 @@ class Scraper:
             const value = chunks.splice(1).join("")
             return {...acc,[key]:value}
         },{})
+        info['museum']= museum;
+        info['location']= loc;
         return JSON.stringify(info);
         '''
         details = self.driver.execute_script(script)
